@@ -1,0 +1,253 @@
+#!C:/Users/DELL/AppData/Local/Programs/Python/Python39/python.exe
+print("Content-type:text/html \r\n\r\n")
+import cgi,pymysql,cgitb;cgitb.enable()
+conn=pymysql.connect(host="localhost",user="root",password="",database="fest")
+cur=conn.cursor()
+f=cgi.FieldStorage()
+if len(f)==2:
+    id=f.getvalue("id")
+    cid=f.getvalue("cid")
+else:
+    id = f.getvalue("id")
+    cid = f.getvalue("cid")
+    Sportsheadid = f.getvalue("hid")
+    name = f.getvalue("name")
+    email = f.getvalue("gmail")
+    mobno = f.getvalue("number")
+    uname = f.getvalue("uname")
+    pwd = f.getvalue("psw")
+    profile = f['profile']
+    if profile.filename:
+        import os
+
+        fp = os.path.basename(profile.filename)
+        open("images/" + fp, "wb").write(profile.file.read())
+        q1 = """update sportshead_reg set hid="%s",name="%s",gmail="%s",number="%s",uname="%s",psw="%s", profile="%s" where id="%s" """%(Sportsheadid, name, email, mobno, uname, pwd, fp, cid)
+        cur.execute(q1)
+        conn.commit()
+        print("""
+                        <script>
+                            alert("profile updated")
+                            location.href="sportshead_profile.py?id=%s";
+                        </script>
+                """%(id))
+    else:
+        q1 = """update sportshead_reg set hid="%s",name="%s",gmail="%s",number="%s",uname="%s",psw="%s" where id="%s" """%(Sportsheadid, name, email, mobno, uname, pwd, cid)
+        cur.execute(q1)
+        conn.commit()
+        print("""
+                                <script>
+                                    alert("profile updated")
+                                    location.href="sportshead_profile.py?id=%s";
+                                </script>
+                        """%(id))
+q="""select * from sportshead_reg where id=%s"""%(cid)
+cur.execute(q)
+r=cur.fetchone()
+print("""
+<html>
+<head>
+<title>Sportshead profile edit</title>
+<link rel="stylesheet" type="text/css" href="styles/css/bootstrap.min.css">
+<link  rel="icon" type="logo/icon" href="images/logo.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="styles/styles/css/style.css">
+</head>
+<script src="styles/styles/js/jquery.min.js"></script>
+<script src=" styles/styles/js/bootstrap.min.js"></script>
+<style>
+*{
+	padding:0;
+	margin:0;
+	}
+	img{
+	border-radius:50%;
+	margin-left:40px;
+	margin-top:10px;
+	}
+	.header1{
+	height:100px;
+	width:500%;
+	position:fixed;
+	background-color:mediumseagreen;
+	}
+	.google{
+	color:white;
+	position:absolute;
+	top:20%;
+	left:50px;
+	}
+body {
+  font-family: "Lato",cursive;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: blue;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 40px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+body
+{
+background-image:url('images/cup.jpg');
+background-repeat:no-repeat;
+height:1000px;
+background-size:cover;
+}
+</style>
+<body>
+<body>
+<div class="full">
+<div class="container-fluid" class="jumbotron text-center">
+<div class="row" style="background-color:dodgerblue;">
+<div class="col-sm-4"><img class="img-circle" height="80px" width="80px"
+ src="images/logo.jpg" alt="logo"></div>
+<div class="col-sm-12">
+ <h1 style="margin-left:130px; margin-top:-60px; font-family:times new roman;font-size:40">Automated Sports</h1></div>
+</div>
+<div id="main">
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+</div>
+</div>
+</div>""")
+print("""
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <li class="nav-item">
+<a class="nav-link collapsed text-truncate"   href="sportshead_profile.py?id=%s" >
+<span class="d-none d-sm-inline" style="color:white;"><i class="fa fa-home">Profile</i></span></a></li>
+  <li class="nav-item">
+<a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#submenu1">
+
+<span class="d-none d-sm-inline" style="color:white;"><i class="fa fa-product-hunt">Eventschedule<span class="caret"></span></i></span></a>
+<div class="collapse" id="submenu1" aria-expanded="false">
+<ul class="flex-column pl-2 nav"><br>
+<li class="nav-item">
+<a class="nav-link py-0" href="event_new.py?id=%s">
+<span style="color:brown;"><i class="fa fa-caret-right"><b> New</b></i></span></a></li></ul>
+    
+<ul class="flex-column pl-2 nav"><br>
+<li class="nav-item">
+<a class="nav-link py-0" href="event_existing.py?id=%s">
+<span style="color:brown;"><i class="fa fa-caret-right"><b> Existing</b></i></span></a></li>
+<ul class="flex-column pl-2 nav"><br>
+</div>
+</li>
+  <li class="nav-item">
+<a class="nav-link collapsed text-truncate"  href="volunteer_existing.py?id=%s" >
+<span class="d-none d-sm-inline" style="color:white;"><i class="fa fa-home">Student details</i></span></a></li>
+  <li class="nav-item">
+<a class="nav-link collapsed text-truncate"  href="result.py?id=%s" >
+<span class="d-none d-sm-inline" style="color:white;"><i class="fa fa-home">Result</i></span></a></li>
+<li class="nav-item">
+<a class="nav-link collapsed text-truncate" href="index.html">
+<span class="d-none d-sm-inline" style="color:white;"><i class="fa fa-sign-out">Logout</i></span></a></li>
+</ul>
+</div>
+
+
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+}
+</script>
+   </div>
+
+""" % (id, id,id,id,id))
+print("""
+<div class="col-sm-2">
+</div>
+<center>
+<div class="col-sm-8"></br>
+<br><h2 style="color:gold;font-size:25px">SPORTSHEAD PROFILE EDIT</h2><br>
+<form action="sportshead_profile_edit.py" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="%s">
+<input type="hidden" name="cid" value="%s">
+<table  style="background-color:pink" cellpadding="20" cellspacing="20">
+<img src="images/%s" width="100" height="100">
+
+<tr>
+<td align="center"><br>PROFILE:</td>
+<td><br><input type="file" id="profile" name="profile"></td>
+</tr>
+<tr>
+<td align="left"><b><br>SportsheadId:</b></td>
+<td><input type="text" name="hid" id="hid" value="%s" readonly autocomplete="off"></td>
+</tr>
+<tr>
+<td align="left"><b><br>Name:</b></td>
+<td><input type="text" name="name" id="name" value="%s" required></td>
+</tr>
+<tr>
+<td align="left"><b><br>E-mail:</b></td>
+<td><input type="email" placeholder="@gmail.com" name="gmail" id="gmail" value="%s" required></td>
+</tr>
+<tr>
+<td align="left"><b><br>Mobile number:</b></td>
+<td><input type="tel" name="number" id="number" value="%s" required></td>
+</tr>
+<tr>
+<td align="left"><b><br>Username:</b></td>
+<td><input type="text" name="uname" id="uname" value="%s" readonly autocomplete="off"></td>
+</tr>
+<tr>
+<td align="left"><b><br>Password:</b></td>
+<td><input type="password" name="psw" id="psw" value="%s" required></td>
+</tr>
+<br>
+<tr><td>
+<button class="button button1"><input type="submit" name="submit" id="submit" value="Update" ></td>
+<td><button class="button button1"><input type="reset" value="Cancel"></td></tr></center></td>
+</form>"""%(id,cid,r[10],r[1],r[2],r[3],r[6],r[8],r[9]))
+conn.close()
+print("""
+</div>
+</div>
+</div>
+
+</body>
+</html>
+""")
