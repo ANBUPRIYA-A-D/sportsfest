@@ -1,0 +1,341 @@
+#!C:/Users/DELL/AppData/Local/Programs/Python/Python39/python.exe
+print("Content-type:text/html \r\n\r\n")
+import cgi, cgitb;cgitb.enable()
+import pymysql
+conn = pymysql.connect(host="localhost", user="root", password="", database="fest")
+cur = conn.cursor()
+q1 = """select max(id) from event1_reg"""
+cur.execute(q1)
+r = cur.fetchone()
+if r[0] != None:
+    n = r[0]
+else:
+    n = 0
+z = ""
+if n < 10:
+    z = "000"
+elif n < 100:
+    z = "00"
+elif n < 1000:
+    z = "0"
+else:
+    z = ""
+sid="stud"+z+str(n + 1)
+print("""
+<html>  
+<head>   
+<title>Student registration</title>
+<link rel="stylesheet" type="text/css" href="styles/styles1.css">
+<link  rel="icon" type="logo/icon" href="images/logo.jpg">
+<link rel="stylesheet" type="text/css" href="styles/css/bootstrap.min.css">
+<script src="styles/js/jquery.min.js"></script>
+<script src="styles/js/bootstrap.min.js"></script>
+<style>
+	* {box-sizing: border-box;}
+
+body { 
+  margin: 0;
+  font-family: Verdana,Grande,Fahoma,sans-serif;
+}
+
+.header {
+  overflow: hidden;
+  background-color:mediumseagreen;
+  padding: 3px 10px;
+}
+
+.header a {
+  float: left;
+  color: blue;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px; 
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+.header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.header a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.header a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.header-right {
+  float: right;
+}
+
+@media screen and (max-width: 500px) {
+  .header a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+
+  .header-right {
+    float: none;
+  }
+}
+
+	body{
+		margin:0px;
+		padding:0px;
+		background-image:url('images/sports.jpg');
+		background-repeat:no-repeat;
+		background-size:100% 1500px;
+		background-size:cover;
+		}
+	.simple-form{
+		text-align:center;
+		margin:100px 400px;
+		}
+	#registration{
+		margin:auto;
+		width:80%;
+		background-color:gray;
+		text-align:center;
+		color:white;
+		opacity:0.8;
+		border:2px solid white;
+		padding:50px 0px;
+		}
+	#button{
+		width:250px;
+		padding:10px;
+		border-radius:5px;
+		outline:0px;
+		}
+	#ph{
+		outline:0px;
+		width:70px;
+		padding:10px;
+		border-radius:5px;
+	}
+	#phone{
+		width:200px;
+		padding:10px;
+		border-radius:5px;
+		outline:0px;
+		}
+		#check{
+	font-family:serif;
+	font-size:18px;
+}
+	#rd{
+
+	}
+	#but{
+		color:white;
+		font-size:18px;
+	}
+	#butt{
+		width:200px;
+		padding:10px;
+		border-radius:5px;
+		outline:0px;
+		background-color:#0c6996;
+		border:2px solid #01010c;
+		color:aliceblue;
+		font-size:18px;
+		}
+		.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: blue;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 40px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 10px;}
+  .sidenav a {font-size: 18px;}
+}
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: blue;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 40px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 10px;}
+  .sidenav a {font-size: 18px;}
+}
+
+	</style>
+</head>  
+<body> 
+<div class="header">
+<img src="images/logo.jpg" alt="logo" width="70" height="70"
+style="margin-left:5px;
+margin-top:4px;
+margin-bottom:5px;border-radius:50%">
+<div class="google">
+<h1 style="margin-left:90px; margin-top:-50px; font-family:times new roman;font-size:40">Automated Sports</h1>
+ </div>
+ </div><br><br><br><br><br>""")
+print("""
+ <center>
+<div class="container"> 
+<h3><br><b>REGISTERATION</b></h3>
+<form action="#" method="post" enctype="multipart/form-data" >
+<table style="color:black;font-family:cursive;">
+<tr>
+<td align="left"><b><br>StudentId:</b></td>
+<td><input type="text" name="sid" id="sid" value="%s" readonly autocomplete="off"></td>
+</tr>
+<tr>
+<td align="left"><b><br>Name:</b></td>
+<td><input type="text" name="name" id="name" required></td>
+</tr>
+<tr>
+<td align="left">SportsName </td><td>
+<select name="game" id="game">
+<option>Hockey</option>
+<option>Cricket</option>
+<option>Tennis</option>
+<option>Chess</option>
+<option>Basketball</option>
+<option>Volleyball</option></td>
+</select>
+</tr>
+<tr>
+<td align="left"><b><br>Number:</b></td>
+<td><input type="text" name="number" id="number" required></td>
+</tr>
+<tr>
+<td align="left"><b><br>E-mail:</b></td>
+<td><input type="email" placeholder="@gmail.com" name="gmail" id="gmail" required></td>
+</tr>
+<tr>
+<td align="left"><b><br>Address:</b></td>
+<td><input type="tel" name="address" id="address" required></td>
+</tr><tr>
+<td><b>Profile:</b></td>
+<td><br><input type="file" id="profile" name="profile"></td>
+</tr>
+
+
+</table><br>
+<input type="submit" name="submit" id="submit" value="Register" class="btn float-right login_btn">
+<input type="reset" value="Cancel" class="btn float-right login_btn">
+</form>
+
+</div> 
+</center>
+
+</body>  
+</html>  
+"""%(sid))
+f = cgi.FieldStorage()
+sub = f.getvalue("submit")
+if sub != None:
+
+    StudentId = f.getvalue("sid")
+    Name = f.getvalue("name")
+    SportsName = f.getvalue("game")
+    Number = f.getvalue("number")
+    profile = f['profile']
+    Email = f.getvalue("gmail")
+    Address = f.getvalue("address")
+    if profile.filename:
+        import os
+
+        fp = os.path.basename(profile.filename)
+        open("images/" + fp, "wb").write(profile.file.read())
+
+        q = """insert into
+        event1_reg(sid,name,game,number,profile,gmail,address)
+        values('%s','%s','%s','%s','%s','%s','%s')"""%(StudentId,Name, SportsName,Number,fp,Email,Address)
+        cur.execute(q)
+        conn.commit()
+        conn.close()
+
+
+
+
+        print("""
+                            <script>
+                			    alert("Registered successfully");
+                                location.href="event1_new.py";
+                            </script>
+                           """)
+    else:
+        print("""
+                            <script>
+                                alert("Login invalid");
+                                location.href="event1_reg.py";
+                            </script>
+                            """)
